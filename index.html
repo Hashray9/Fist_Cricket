@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Two Players Game</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+
+        .container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        button {
+            padding: 10px;
+            margin: 5px;
+            border: 2px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        button {
+            background-color: #4CAF50;
+            color: white;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .batting-card {
+            background-color: #dff0d8;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div id="player1NameInput">
+        <h2>Player 1, enter your name:</h2>
+        <input type="text" id="player1Name" required>
+        <button onclick="nextNameInput()">Next</button>
+    </div>
+    <div id="player2NameInput" class="hidden">
+        <h2>Player 2, enter your name:</h2>
+        <input type="text" id="player2Name" required>
+        <button onclick="showCoinToss()">Next</button>
+    </div>
+    <div id="coinToss" class="hidden">
+        <h2>Coin Toss</h2>
+        <p id="player1NameDisplay">Player 1, call heads or tails:</p>
+        <button onclick="callCoinToss('heads')">Heads</button>
+        <button onclick="callCoinToss('tails')">Tails</button>
+    </div>
+    <div id="coinTossResult" class="hidden">
+        <h2 id="coinTossMessage"></h2>
+        <button onclick="decideAction('bat')">Bat First</button>
+        <button onclick="decideAction('bowl')">Bowl First</button>
+    </div>
+    <div id="player1NumberInput" class="hidden">
+        <h2 id="player1InputNameDisplay"></h2>
+        <h3>Enter a number (1-6):</h3>
+        <input type="number" id="player1Number" min="1" max="6" required>
+        <button onclick="nextPlayer()">Next</button>
+    </div>
+    <div id="player2NumberInput" class="hidden">
+        <h2 id="player2InputNameDisplay"></h2>
+        <h3>Enter a number (1-6):</h3>
+        <input type="number" id="player2Number" min="1" max="6" required>
+        <button onclick="compareNumbers()">Submit</button>
+    </div>
+    <div id="result" class="hidden">
+        <h2>Results</h2>
+        <p id="player1ResultDisplay"></p>
+        <p id="player2ResultDisplay"></p>
+        <p id="totalScoreDisplay"></p>
+    </div>
+</div>
+
+<div id="battingCard" class="container batting-card hidden">
+    <h2>Current Batting Player</h2>
+    <p id="battingPlayerDisplay"></p>
+</div>
+
+<script>
+    let coinWinner = "";
+    let battingPlayer = "";
+    let nonBattingPlayer = "";
+    let totalScore = 0; // Initialize total score
+    let player1Score = 0; // Track Player 1's score
+    let player2Score = 0; // Track Player 2's score
+    let isPlayer1Batting = true; // Flag to check if Player 1 is batting
+
+    function nextNameInput() {
+        const player1Name = document.getElementById('player1Name').value;
+        if (player1Name.trim() !== "") {
+            document.getElementById('player1NameInput').classList.add('hidden');
+            document.getElementById('player2NameInput').classList.remove('hidden');
+        } else {
+            alert('Please enter a valid name for Player 1.');
+        }
+    }
+
+    function showCoinToss() {
+        const player2Name = document.getElementById('player2Name').value;
+        if (player2Name.trim() !== "") {
+            document.getElementById('player2NameInput').classList.add('hidden');
+            document.getElementById('coinToss').classList.remove('hidden');
+            document.getElementById('player1NameDisplay').innerText = `${document.getElementById('player1Name').value}, call heads or tails:`;
+        } else {
+            alert('Please enter a valid name for Player 2.');
+        }
+    }
+
+    function callCoinToss(call) {
+        const coinResult = Math.random() < 0.5 ? 'heads' : 'tails';
+        const player1Name = document.getElementById('player1Name').value;
+        const player2Name = document.getElementById('player2Name').value;
+        document.getElementById('coinToss').classList.add('hidden');
+        document.getElementById('coinTossResult').classList.remove('hidden');
+        if (call === coinResult) {
+            document.getElementById('coinTossMessage').innerText = `Coin toss result is ${coinResult}. ${player1Name} won the toss.`;
+            coinWinner = 'player1';
+        } else {
+            document.getElementById('coinTossMessage').innerText = `Coin toss result is ${coinResult}. ${player2Name} won the toss.`;
+            coinWinner = 'player2';
+        }
+    }
+
+    function decideAction(action) {
+        const player1Name = document.getElementById('player1Name').value;
+        const player2Name = document.getElementById('player2Name').value;
+        document.getElementById('coinTossResult').classList.add('hidden');
+        document.getElementById('battingCard').classList.remove('hidden');
+
+        if (coinWinner === 'player1') {
+            battingPlayer = (action === 'bat') ? player1Name : player2Name;
+        } else {
+            battingPlayer = (action === 'bat') ? player2Name : player1Name;
+        }
+
+        nonBattingPlayer = (battingPlayer === player1Name) ? player2Name : player1Name;
+
+        document.getElementById('battingPlayerDisplay').innerText = `${battingPlayer} is batting`;
+
+        document.getElementById('player1InputNameDisplay').innerText = `${battingPlayer}, enter a number (1-6):`;
+        document.getElementById('player2InputNameDisplay').innerText = `${nonBattingPlayer}, enter a number (1-6):`;
+
+        // Display the input for batting player first
+        if (battingPlayer === player1Name) {
+            document.getElementById('player1NumberInput').classList.remove('hidden');
+            isPlayer1Batting = true; // Set Player 1 as batting
+        } else {
+            document.getElementById('player2NumberInput').classList.remove('hidden');
+            isPlayer1Batting = false; // Set Player 2 as batting
+        }
+    }
+
+    function nextPlayer() {
+        const battingPlayerInput = isPlayer1Batting ? 'player1Number' : 'player2Number';
+        const nonBattingPlayerInput = isPlayer1Batting ? 'player2Number' : 'player1Number';
+
+        const battingPlayerNumber = parseInt(document.getElementById(battingPlayerInput).value);
+
+        // Validate batting player's number
+        if (battingPlayerNumber >= 1 && battingPlayerNumber <= 6) {
+            document.getElementById(battingPlayerInput + 'Input').classList.add('hidden');
+            document.getElementById(nonBattingPlayerInput + 'Input').classList.remove('hidden');
+        } else {
+            alert('Please enter a valid number between 1 and 6.');
+        }
+    }
+
+    function compareNumbers() {
+        const player1Name = document.getElementById('player1Name').value;
+        const player2Name = document.getElementById('player2Name').value;
+
+        const player1Number = parseInt(document.getElementById('player1Number').value);
+        const player2Number = parseInt(document.getElementById('player2Number').value);
+
+        if (player2Number < 1 || player2Number > 6) {
+            alert('Please enter a valid number between 1 and 6.');
+            return;
+        }
+
+        document.getElementById('player1NumberInput').classList.add('hidden');
+        document.getElementById('player2NumberInput').classList.add('hidden');
+
+        document.getElementById('result').classList.remove('hidden');
+        document.getElementById('player1ResultDisplay').innerText = `${player1Name} chose: ${player1Number}`;
+        document.getElementById('player2ResultDisplay').innerText = `${player2Name} chose: ${player2Number}`;
+
+        if (player1Number === player2Number) {
+            alert(`${battingPlayer} is out!`);
+            document.getElementById('result').classList.add('hidden');
+            if (isPlayer1Batting) {
+                player1Score = totalScore;
+                totalScore = 0; // Reset total score for Player 2
+                alert(`${player1Name} scored ${player1Score}. ${player2Name}, you need to score ${player1Score + 1} to win.`);
+                isPlayer1Batting = false;
+                switchBattingPlayer(); // Start Player 2's batting
+            } else {
+                player2Score = totalScore;
+                if (player2Score >= player1Score + 1) {
+                    alert(`${player2Name} wins!`);
+                } else {
+                    alert(`${player1Name} wins!`);
+                }
+                // Reset game
+                resetGame();
+            }
+        } else {
+            totalScore += player1Number; // Add player1Number to total score
+            document.getElementById('totalScoreDisplay').innerText = `Total Score: ${totalScore}`;
+            alert(`${battingPlayer} scored ${player1Number}! Total Score: ${totalScore}`);
+            document.getElementById('result').classList.add('hidden');
+            
+            // Check if chasing player has won
+            if (!isPlayer1Batting && totalScore >= player1Score + 1) {
+                alert(`${player2Name} wins!`);
+                resetGame();
+            } else {
+                // Prompt for the next numbers
+                promptNextNumbers();
+            }
+        }
+    }
+
+    function promptNextNumbers() {
+        // Reset the input fields for the next round
+        document.getElementById('player1Number').value = "";
+        document.getElementById('player2Number').value = "";
+
+        // Display the input for both players
+        document.getElementById('player1NumberInput').classList.remove('hidden');
+        document.getElementById('player2NumberInput').classList.remove('hidden');
+    }
+
+    function switchBattingPlayer() {
+        const temp = battingPlayer;
+        battingPlayer = nonBattingPlayer;
+        nonBattingPlayer = temp;
+        document.getElementById('battingPlayerDisplay').innerText = `${battingPlayer} is batting`;
+
+        document.getElementById('player1InputNameDisplay').innerText = `${battingPlayer}, enter a number (1-6):`;
+        document.getElementById('player2InputNameDisplay').innerText = `${nonBattingPlayer}, enter a number (1-6):`;
+
+        // Display the input for the new batting player first
+        promptNextNumbers();
+    }
+
+    function resetGame() {
+        totalScore = 0;
+        player1Score = 0;
+        player2Score = 0;
+        isPlayer1Batting = true;
+        document.getElementById('player1NameInput').classList.remove('hidden');
+        document.getElementById('player2NameInput').classList.add('hidden');
+        document.getElementById('battingCard').classList.add('hidden');
+    }
+</script>
+</body>
+</html>

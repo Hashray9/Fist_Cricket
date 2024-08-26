@@ -1,0 +1,749 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Fist Cricket</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bangers&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Honk&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+    <style>
+        body h1 {
+            font-family: 'Honk', cursive;
+            font-size: 100px;
+            margin-top: 5px;
+            margin-bottom: 10px;
+        }
+
+        body {
+            background-image: url("new.png");
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            font-family: Arial, sans-serif;
+            flex-direction: row;
+            text-align: center;
+            margin-top: 10px;
+        }
+        #player1Image{
+            width:400px;
+            height: 270px;
+        }
+        #player2Image{
+            width:400px;
+            height:270px;
+
+        }
+        #player1Area , #player2Area{
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: auto;
+        }
+
+        .view {
+            display: none;
+        }
+
+        .view.active {
+            display: block;
+        }
+
+        #next {
+            display: none;
+        }
+
+        #Submit1 {
+            display: none;
+        }
+
+        #container {
+            margin: auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(8px) saturate(180%);
+            -webkit-backdrop-filter: blur(8px) saturate(180%);
+            background-color: rgba(183, 196, 191, 0.27);
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.125);
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 500px;
+            text-align: center;
+            font-family: 'Bangers';
+            font-size: xx-large;
+        }
+
+        #container input[type="text"],
+        #container input[type="password"] {
+            width: calc(100% - 22px);
+            margin: 10px 0;
+            padding: 5px;
+            font-family: 'Bangers', sans-serif;
+            font-size: x-large;
+        }
+
+        #container button,
+        #container span {
+            margin: 10px 0;
+        }
+
+        button {
+            align-items: center;
+            appearance: none;
+            background-color: rgb(244, 247, 158);
+            border-radius: 4px;
+            border-width: 0;
+            box-shadow: rgba(45, 35, 66, 0.2) 0 2px 4px, rgba(45, 35, 66, 0.15) 0 7px 13px -3px, #D6D6E7 0 -3px 0 inset;
+            box-sizing: border-box;
+            color: #36395A;
+            cursor: pointer;
+            display: inline-flex;
+            font-family: 'Press Start 2P', 'VT323', sans-serif;
+            height: 48px;
+            justify-content: center;
+            line-height: 1;
+            list-style: none;
+            overflow: hidden;
+            padding-left: 16px;
+            padding-right: 16px;
+            position: relative;
+            text-align: left;
+            text-decoration: none;
+            transition: box-shadow .15s, transform .15s;
+            user-select: none;
+            -webkit-user-select: none;
+            touch-action: manipulation;
+            white-space: nowrap;
+            will-change: box-shadow, transform;
+            font-size: 18px;
+        }
+
+        button:focus {
+            box-shadow: #D6D6E7 0 0 0 1.5px inset, rgba(45, 35, 66, 0.4) 0 2px 4px, rgba(45, 35, 66, 0.3) 0 7px 13px -3px, #D6D6E7 0 -3px 0 inset;
+        }
+
+        button:hover {
+            box-shadow: rgba(45, 35, 66, 0.3) 0 4px 8px, rgba(45, 35, 66, 0.2) 0 7px 13px -3px, #D6D6E7 0 -3px 0 inset;
+            transform: translateY(-2px);
+        }
+
+        button:active {
+            box-shadow: #D6D6E7 0 3px 7px inset;
+            transform: translateY(2px);
+        }
+
+        fieldset {
+            margin-top: 20px;
+        }
+
+        #outt {
+            color: rgba(255, 103, 103, 0.955);
+        }
+
+        #info {
+            color: rgb(85, 232, 215);
+        }
+
+        #restart {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 6px 12px;
+            gap: 8px;
+            height: 34px;
+            width: 200px;
+            border: none;
+            background: #ff362b34;
+            border-radius: 20px;
+            cursor: pointer;
+        }
+
+        #restart:hover {
+            background: #ff362b52;
+        }
+
+        #restart:hover .svg-icon {
+            animation: spin 2s linear infinite;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(-360deg);
+            }
+        }
+
+        #restart {
+            display: none;
+        }
+
+        input {
+            padding: 10px;
+            height: 40px;
+            border: 2px solid #0B2447;
+            border-top: none;
+            font-size: 16px;
+            background: transparent;
+            outline: none;
+            box-shadow: 7px 7px 0px 0px #0B2447;
+        }
+
+        input[type="password"] {
+            width: 80px !important;
+        }
+
+        .coin {
+            height: 150px;
+            width: 150px;
+            position: relative;
+            margin: 32px auto;
+            -webkit-transform-style: preserve-3d;
+            transform-style: preserve-3d;
+        }
+
+        .coin img {
+            width: 145px;
+        }
+
+        .heads,
+        .tails {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+        }
+
+        .tails {
+            transform: rotateX(180deg);
+        }
+
+        @keyframes spin-tails {
+            0% {
+                transform: rotateX(0);
+            }
+
+            100% {
+                transform: rotateX(1980deg);
+            }
+        }
+
+        @keyframes spin-heads {
+            0% {
+                transform: rotateX(0);
+            }
+
+            100% {
+                transform: rotateX(2160deg);
+            }
+        }
+        .frame{
+            margin:140px auto auto auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(8px) saturate(180%);
+            -webkit-backdrop-filter: blur(8px) saturate(180%);
+            background-color: rgba(183, 196, 191, 0.27);
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.125);
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 400px;
+            height:270px;
+            text-align: center;
+            font-family: 'Bangers';
+            font-size: xx-large;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="player1Area" >
+        <div class="frame">
+            <img id="player1Image" src="" alt="Player 1" >
+        </div>
+    </div>
+    <div id="playArea">
+    <audio id="h" src="heads-is.mp3"></audio>
+    <audio id="t" src="tails.mp3"></audio>
+    <h1>Fist Cricket</h1>
+    <div class="coin , view" id="coin">
+        <div class="heads">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/0/0f/Indian_20_Rupee_coin.png?20211211151051">
+        </div>
+        <div class="tails">
+            <img
+                src="https://upload.wikimedia.org/wikipedia/commons/4/4e/Indian_20_Rupee_coin_Reverse.png?20211211151813">
+        </div>
+    </div>
+    <form id="container" autocomplete="off">
+        <div class="view active" id="entry-card">
+            Player 1 name: <input required id="player1" type="text" maxlength="50" minlength="1"><br>
+            Player 2 name: <input required id="player2" type="text" maxlength="50" minlength="1"><br>
+            <button id="newNext" onclick="validateAndShow('toss')">Next</button>
+        </div>
+
+        <div class="view" id="toss">
+            <span id="displayArea"></span> <span id="it is"> ,Call for 'Heads' or 'Tails'</span><br>
+            <button id="heads" onclick="callsHeads()"> Heads </button> <button id="tails" onclick="callsTails()"> Tails
+            </button>
+            <audio id="coinSound" src="coin-toss.mp3"></audio>
+        </div>
+        <div class="view" id="BatOrBall">
+            <span id="before"></span> <span id="displayArea1"></span> <span id="wonORloss"></span><br>
+            <button id="bat" onclick="choseBat()"> Bat </button> <button id="ball" onclick="choseBall()"> Ball
+            </button>
+        </div>
+        <div class="view" id="enter-number">
+            <span id="displayArea3"></span> <input id="player1number" required type="password" min="1" max="6"
+                autocomplete="off" /><br>
+            <span id="displayArea4"></span> <input id="player2number" required type="password" min="1" max="6"
+                autocomplete="off" /><br>
+            <button id="Submit" type="button" onclick="compare()">Submit</button>
+            <button id="Submit1" type="button" onclick="compare1()">Submit</button>
+            <fieldset>
+                <legend>Score Card</legend>
+                <span id="batt"><span id="displayArea5"></span> batting.<br></span>
+                <span id="displayArea6"></span> score is: <span id="score">0</span><br>
+                <b id="outt"><span id="out"></span></b> <span id="info"></span><br>
+                <button type="button" id="next" onclick="timeToChase()">Next</button>
+                <button type="button" id="restart" onclick="Restart()"><svg class="svg-icon" fill="none" height="20"
+                        viewBox="0 0 20 20" width="20" xmlns="http://www.w3.org/2000/svg">
+                        <g stroke="#ff342b" stroke-linecap="round" stroke-width="1.5">
+                            <path
+                                d="m3.33337 10.8333c0 3.6819 2.98477 6.6667 6.66663 6.6667 3.682 0 6.6667-2.9848 6.6667-6.6667 0-3.68188-2.9847-6.66664-6.6667-6.66664-1.29938 0-2.51191.37174-3.5371 1.01468">
+                            </path>
+                            <path
+                                d="m7.69867 1.58163-1.44987 3.28435c-.18587.42104.00478.91303.42582 1.0989l3.28438 1.44986">
+                            </path>
+                        </g>
+                    </svg><span> Restart</span></button>
+            </fieldset>
+        </div>
+    </div>
+    <div id="player2Area">
+        <div class="frame">
+            <img id="player2Image" src="" alt="player 2" >
+        </div>
+    </div>
+    </form>
+    <script>
+        const images=[
+            "1.png",
+            "2.png",
+            "3.png",
+            "4.png",
+            "5.png",
+            "6.png"
+        ]
+        let result;
+        let battingplayer = 1;
+        let computerflag = 1;
+        let playerFlag = 1;
+        let p1 = 0;
+        let p2 = 0;
+        let player1score = 0;
+        let player2score = 0;
+
+        let coinIcon = document.getElementById('coin');
+        let tossBtnH = document.getElementById('heads');
+        let tossBtnT = document.getElementById('tails');
+        let player1=document.querySelector("#player1");
+        let player2=document.querySelector("#player2");
+        let player1number=document.getElementById("player1number");
+        let player2number=document.getElementById("player2number");
+        let displayArea=document.getElementById("displayArea")
+        let displayArea1=document.getElementById("displayArea1");
+        let displayArea3=document.getElementById("displayArea3");
+        let displayArea4=document.getElementById("displayArea4");
+        let displayArea5=document.getElementById("displayArea5");
+        let displayArea6=document.getElementById("displayArea6");
+        let restart=document.getElementById("restart");
+
+
+
+        tossBtnH.addEventListener('click', () => {
+            tossBtnH.disabled = true;
+            tossCoinFunction();
+        });
+        tossBtnT.addEventListener('click', () => {
+            tossBtnT.disabled = true;
+            tossCoinFunction();
+        });
+        function tossCoinFunction() {
+
+            let i = Math.floor(Math.random() * 2);
+            coin.style.animation = "none";
+            if (result == 'Tails') {
+                setTimeout(function () {
+                    coin.style.animation = "spin-heads 2s forwards";
+                }, 60);
+
+            }
+            else {
+                setTimeout(function () {
+                    coin.style.animation = "spin-tails 2s forwards";
+                }, 60);
+
+            }
+        }
+
+        function soundh() {
+            coinSound.play();
+            h.play();
+        }
+        function soundt() {
+            coinSound.play();
+            t.play();
+        }
+        function show(viewId) {
+            let views = document.querySelectorAll(".view");
+            views.forEach(function (view) {
+                view.classList.remove("active");
+            });
+            let selectedView = document.getElementById(viewId);
+            selectedView.classList.add("active");
+            displayArea.innerText = player1.value;
+        }
+        function validateAndShow(viewId) {
+            const player1 = document.getElementById("player1").value.trim();
+            const player2 = document.getElementById("player2").value.trim();
+            if (player1 === "" || player2 === "") {
+                alert("Both players must enter their names.");
+                return;
+            }
+            else {
+                coinIcon.style.display = "flex";
+                show(viewId);
+            }
+            
+        }
+        function callsHeads() {
+            soundh();
+            playerFlag = 1;
+            displayArea.innerText = player1.value;
+            document.getElementById('it is').innerText=",calls Heads";
+            tossSelection();
+            if (playerFlag == computerflag) {
+                document.getElementById("before").innerText = " Heads it is,";
+                displayArea1.innerText = player1.value;
+                document.getElementById("wonORloss").innerText = " won the toss";
+                p1 = 1;
+                p2 = 0;
+            } else {
+                document.getElementById("before").innerText = " Tails it is,";
+                displayArea1.innerText = player2.value;
+                document.getElementById("wonORloss").innerText = " won the toss";
+                p1 = 0;
+                p2 = 1;
+            }
+        }
+
+        function callsTails() {
+            soundt();
+            playerFlag = 0;
+            let name = document.querySelector("#player1").value;
+            displayArea.innerText = player1.value;
+            document.getElementById('it is').innerText=",calls Tails";
+            tossSelection();
+            if (playerFlag == computerflag) {
+                document.getElementById("before").innerText = " Tails it is,";
+                const name = document.querySelector("#player1").value;
+                displayArea1.innerText = player1.value;
+                document.getElementById("wonORloss").innerText = " won the toss";
+                p1 = 1;
+                p2 = 0;
+            } else {
+                document.getElementById("before").innerText = " Heads it is,";
+                displayArea1.innerText = player2.value;
+                document.getElementById("wonORloss").innerText = " won the toss";
+                p1 = 0;
+                p2 = 1;
+            }
+        }
+
+        function tossSelection() {
+
+            result = Math.random() < 0.5 ? 'Heads' : 'Tails';
+
+            if (result == 'Tails') {
+                computerflag = 0;
+            } else if (result == 'Heads') {
+                computerflag = 1;
+            }
+            setTimeout(()=>{show('BatOrBall')},2200)
+            tossBtnH.style.display="none";
+            tossBtnT.style.display="none";
+        }
+
+        
+        function choseBat() {
+            coinIcon.style.display = "none";
+            show('enter-number');
+            if (p1 == 1 && p2 == 0) {
+                displayArea5.innerText = `${player1.value}'s`;
+                displayArea6.innerText = `${player1.value}'s`;
+                battingplayer = 1;
+            } else if (p1 == 0 && p2 == 1) {
+                displayArea5.innerText = `${player2.value}'s`;
+                displayArea6.innerText = `${player2.value}'s`;
+                battingplayer = 0;
+            }
+            displayArea3.innerText = `${player1.value}:`;
+            displayArea4.innerText = `${player2.value}:`;
+        }
+
+        function choseBall() {
+            coinIcon.style.display = "none";
+            show('enter-number');
+            if (p1 == 1 && p2 == 0) {
+                displayArea5.innerText = `${player2.value}'s`;
+                displayArea6.innerText = `${player2.value}'s`;
+                battingplayer = 0;
+            } else if (p1 == 0 && p2 == 1) {
+                displayArea5.innerText = `${player1.value}'s`;
+                displayArea6.innerText = `${player1.value}'s`;
+                battingplayer = 1;
+            }
+            displayArea3.innerText = `${player1.value}:`;
+            displayArea4.innerText = `${player2.value}:`;
+        }
+
+        function compare() {
+            coinIcon.style.display = "none";
+            restart.style.display = "none";
+            if (battingplayer == 1) {
+                let n1 = parseInt(player1number.value, 10);
+                let n2 = parseInt(player2number.value, 10);
+                
+                player2Image.src=images[n2-1];
+                player2Image.style.display = "block";
+                player1Image.src=images[n1-1];
+                player1Image.style.display = "block";
+                if(isNaN(n1) || isNaN(n2)){
+                    player1number.value = '';
+                    player2number.value = '';
+                    alert("Please Enter numerical value.")
+                }
+                else{
+                if (n1 < 1 || n2 < 1 || n1 > 6 || n2 > 6) {
+                    alert("Please enter valid number (1-6)");
+                    player1number.value = '';
+                    player2number.value = '';
+                }
+                else {
+                    if (n1 === n2) {
+                        document.getElementById("out").innerText = `${player1.value} is out.\n`
+                        document.getElementById("info").innerText = `${player2.value} you have to chase ${player1score + 1} to win.`
+                        vanish();
+                    } else {
+                        player1score += n1;
+                        document.getElementById("score").innerText = player1score;
+                    }
+                }
+                
+                    player1number.value = '';
+                    player2number.value = '';
+                    
+
+                }
+            }
+
+            if (battingplayer == 0) {
+                let n1 = parseInt(player1number.value, 10);
+                let n2 = parseInt(player2number.value, 10);
+                player2Image.src=images[n2-1];
+                player2Image.style.display = "block";
+                player1Image.src=images[n1-1];
+                player1Image.style.display = "block";
+                if(isNaN(n1) || isNaN(n2)){
+                    player1number.value = '';
+                    player2number.value = '';
+                    alert("Please Enter numerical value.")
+                }
+                else{
+                if (n1 < 1 || n2 < 1 || n1 > 6 || n2 > 6) {
+                    alert("Please enter valid number (1-6)");
+                    player1number.value = '';
+                    player2number.value = '';
+                }
+                else {
+                    if (n1 === n2) {
+                        document.getElementById("out").innerText = `${player2.value} is out.\n`
+                        document.getElementById("info").innerText = `${player1.value} you have to chase ${player2score + 1} to win.`
+                        vanish();
+                    } else {
+                        player2score += n2;
+                        document.getElementById("score").innerText = player2score;
+                    }
+                }
+                    player1number.value = '';
+                    player2number.value = '';
+                   
+                }
+            }
+            
+        }
+        function compare1() {
+            coinIcon.style.display = "none";
+            if (battingplayer == 1) {
+                n1 = player1score;
+                let n3 = parseInt(player1number.value, 10);
+                let n2 = parseInt(player2number.value, 10);
+                displayArea6.innerText = `${player2.value}'s`;
+                displayArea5.innerText = `${player2.value}'s`;
+                document.getElementById("batt").style.display = "block";
+                player2Image.src=images[n2-1];
+                player2Image.style.display = "block";
+                player1Image.src=images[n3-1];
+                player1Image.style.display = "block";
+                if(isNaN(n3) || isNaN(n2)){
+                    player1number.value = '';
+                    player2number.value = '';
+                    alert("Please Enter numerical value.")
+                }
+                else{
+                if (n3 < 1 || n2 < 1 || n3 > 6 || n2 > 6) {
+                    alert("Please enter valid number (1-6)");
+                    player1number.value = '';
+                    player2number.value = '';
+                }
+                if (n3 == n2 && player2score == player1score) {
+                    document.getElementById("info").innerText = "it's a tie"
+                    details();
+                }
+                else if (n3 == n2) {
+                    if (player2score < n1) {
+                        document.getElementById("outt").style.display = "inline";
+                        document.getElementById("score").innerText = `${player2score}`
+                        document.getElementById("out").innerText = `${player2.value} is out.\n`
+                        document.getElementById("info").innerText = `${player1.value} you won.`
+                        details();
+
+                    }
+
+                    if (player2score == 0) {
+                        document.getElementById("outt").style.display = "inline";
+                        document.getElementById("score").innerText = `${player2score}`
+                        document.getElementById("out").innerText = `${player2.value} is out.\n`
+                        document.getElementById("info").innerText = `${player1.value} you won.`
+                        details();
+                    }
+                }
+                else {
+                    player2score += n2;
+                    if (player2score > (player1score + 1) || player2score == (player1score + 1)) {
+                        document.getElementById("info").innerText = `${player2.value} you won.`
+                        details();
+
+                    }
+                    document.getElementById("score").innerText = player2score;
+                }
+            }
+            
+                player1number.value = '';
+                player2number.value = '';
+                
+            }
+
+            if (battingplayer == 0) {
+                n1 = player2score;
+                let n2 = parseInt(player1number.value, 10);
+                let n3 = parseInt(player2number.value, 10);
+                player2Image.src=images[n3-1];
+                player2Image.style.display = "block";
+                player1Image.src=images[n2-1];
+                player1Image.style.display = "block";
+                displayArea5.innerText = `${player1.value}'s`;
+                displayArea6.innerText = `${player1.value}'s`;
+                document.getElementById("batt").style.display = "block";
+                if(isNaN(n3) || isNaN(n2)){
+                    player1number.value = '';
+                    player2number.value = '';
+                    alert("Please Enter numerical value.")
+                }
+                else{
+                if (n3 < 1 || n2 < 1 || n3 > 6 || n2 > 6) {
+                    alert("Please enter valid number (1-6)");
+                    player1number.value = '';
+                    player2number.value = '';
+                }
+                if (n2 == n3 && player1score == player2score) {
+                    document.getElementById("info").innerText = "it's a tie"
+                    details();
+                }
+                else if (n2 == n3) {
+                    if (player1score < n1) {
+                        document.getElementById("outt").style.display = "inline";
+                        document.getElementById("out").innerText = `${player1score}`
+                        document.getElementById("out").innerText = `${player1.value} is out.\n`
+                        document.getElementById("info").innerText = `${player2.value} you won.`
+                        details();
+                    }
+
+                    if (player1score == 0) {
+                        document.getElementById("outt").style.display = "inline";
+                        document.getElementById("out").innerText = `${player1score}`
+                        document.getElementById("out").innerText = `${player1.value} is out.\n`
+                        document.getElementById("info").innerText = `${player2.value} you won.`
+                        details();
+                    }
+                }
+                else {
+                    player1score += n2;
+                    if (player1score > (player2score + 1) || player1score == (player2score + 1)) {
+                        document.getElementById("info").innerText = `${player1.value} you won.`
+                        details();
+                    }
+                    document.getElementById("score").innerText = player1score;
+                }}
+                
+                player1number.value = '';
+                player2number.value = '';
+                
+
+            }
+        }
+        function vanish() {
+            document.getElementById("batt").style.display = "none";
+            player1number.style.display = "none";
+            player2number.style.display = "none";
+            document.getElementById("Submit").style.display = "none";
+            document.getElementById("next").style.display = "inline";
+            displayArea3.style.display = "none";
+            displayArea4.style.display = "none";
+        }
+        function timeToChase() {
+            player1Image.style.display = "none";
+            player2Image.style.display = "none";
+            displayArea3.style.display = "inline";
+            displayArea4.style.display = "inline";
+            player1number.style.display = "inline";
+            player2number.style.display = "inline";
+            document.getElementById("next").style.display = "none";
+            document.getElementById("Submit1").style.display = "inline";
+            document.getElementById("outt").style.display = "none";
+
+        }
+        function details() {
+            restart.style.display = "inline";
+            document.getElementById("Submit1").style.display = "none";
+            displayArea3.style.display = "none";
+            displayArea4.style.display = "none";
+            player1number.style.display = "none";
+            player2number.style.display = "none";
+        }
+        function Restart() {
+            location.reload();
+        }
+
+    </script>
+</body>
+
+</html>
